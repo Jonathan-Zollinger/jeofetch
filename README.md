@@ -1,0 +1,2 @@
+# gamma
+neofetch but fast
