@@ -1,2 +1,2 @@
-# gamma
-neofetch but fast
+# jeofetch
+neofetch, java flavored
