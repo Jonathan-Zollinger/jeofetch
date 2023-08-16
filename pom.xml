@@ -77,11 +77,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <assembleDirectory>${project.build.directory}/${artifactId}</assembleDirectory>
+                    <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
                     <programs>
                         <program>
                             <mainClass>com.github.jonathanzollinger.jeofetch.Main</mainClass>
-                            <id>excel2json</id>
+                            <id>${project.artifactId}</id>
                         </program>
                     </programs>
                     <repositoryLayout>flat</repositoryLayout>
