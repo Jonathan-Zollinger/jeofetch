@@ -1,7 +1,7 @@
 name: Feature Request
 description: Submit an idea for jeofetch
 labels: [enhancement]
-assignees: ''
+assignees: []
 body:
   - type: markdown
     attributes:
