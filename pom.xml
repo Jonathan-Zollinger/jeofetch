@@ -55,7 +55,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.jonathanzollinger.jeofetch.Main</mainClass>
+                            <mainClass>com.github.jonathan_zollinger.jeofetch.Main</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
@@ -80,7 +80,7 @@
                     <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>com.github.jonathanzollinger.jeofetch.Main</mainClass>
+                            <mainClass>com.github.jonathan_zollinger.jeofetch.Main</mainClass>
                             <id>${project.artifactId}</id>
                         </program>
                     </programs>

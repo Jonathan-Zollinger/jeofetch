@@ -1,4 +1,4 @@
-package com.github.jonathanzollinger.jeofetch;
+package com.github.jonathan_zollinger.jeofetch;
 
 import com.sun.management.OperatingSystemMXBean;
 import org.apache.commons.lang3.SystemUtils;
