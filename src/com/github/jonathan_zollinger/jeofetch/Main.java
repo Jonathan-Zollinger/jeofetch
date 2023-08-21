@@ -1,5 +1,8 @@
 package com.github.jonathan_zollinger.jeofetch;
 
+import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.Terminal;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.BufferedReader;
@@ -22,9 +25,19 @@ public class Main {
         } else if (SystemUtils.IS_OS_WINDOWS) {
             properties.putAll(getWindowsInfo("systeminfo"));
         }
-        for (String property : properties.keySet()) {
-            System.out.printf("%30s = %-20s%n", property, String.join("\n\t", properties.get(property)));
+        try (Terminal terminal = new DefaultTerminalFactory().createTerminal()) {
+            final TextGraphics textGraphics = terminal.newTextGraphics();
+            int row = 0;
+            for (String property : properties.keySet()) {
+                textGraphics.putString(0,row,
+                        String.format("%30s = %-20s%n",
+                                property,
+                                String.join("\n\t", properties.get(property))));
+                row ++;
+            }
+
         }
+
     }
 
     static Map<String, String[]> getLinuxDistroInfo() throws IOException {
