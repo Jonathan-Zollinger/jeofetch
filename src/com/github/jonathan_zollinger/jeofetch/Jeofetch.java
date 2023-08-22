@@ -13,7 +13,7 @@ import java.util.OptionalInt;
 
 @CommandLine.Command(name = "jeofetch",
         mixinStandardHelpOptions = true,
-        version = "jeofetch v0.0.0-SNAPSHOT",
+        version = "jeofetch v0.0.1",
         description="jeofetch is a system information tool written in java",
         footer = "written by Jonathan Zollinger")
 public class Jeofetch implements Runnable{

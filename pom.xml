@@ -6,7 +6,7 @@
 
     <groupId>com.github.jonathan-zollinger</groupId>
     <artifactId>jeofetch</artifactId>
-    <version>0.0.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -68,7 +68,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.jonathan_zollinger.jeofetch.Main</mainClass>
+                            <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
@@ -93,7 +93,7 @@
                     <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>com.github.jonathan_zollinger.jeofetch.Main</mainClass>
+                            <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
                             <id>${project.artifactId}</id>
                         </program>
                     </programs>
