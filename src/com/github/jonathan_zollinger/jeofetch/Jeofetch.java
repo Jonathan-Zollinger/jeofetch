@@ -24,6 +24,7 @@ public class Jeofetch implements Runnable{
         int exitCode = commandLine.execute(args);
         System.exit(exitCode);
         // the bloody transitive property from oshi needs this property assignment
+        System.setProperty("org.slf4j.LoggerFactory", "org.apache.logging.log4j.simple.SimpleLoggerContextFactory");
     }
 
     @Override
@@ -32,7 +33,6 @@ public class Jeofetch implements Runnable{
         OS = new SystemInfo().getOperatingSystem();
         Map<String, String> properties = getHardwareProperties();
         properties.putAll(getOsProperties());
-
     }
 
     private static Map<String, String> getOsProperties() {
