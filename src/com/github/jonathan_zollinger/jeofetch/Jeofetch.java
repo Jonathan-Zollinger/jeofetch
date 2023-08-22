@@ -3,7 +3,6 @@ package com.github.jonathan_zollinger.jeofetch;
 import oshi.SystemInfo;
 import oshi.hardware.GraphicsCard;
 import oshi.hardware.HardwareAbstractionLayer;
-import oshi.hardware.platform.windows.WindowsHardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import picocli.CommandLine;
 
@@ -38,7 +37,7 @@ public class Jeofetch implements Runnable{
         Map<String, String> properties = getHardwareProperties();
         properties.putAll(getOsProperties());
         OptionalInt formatSize = properties.keySet().stream().mapToInt(String::length).max();
-        String formatter = String.format("%s%d%s = %s",
+        String formatter = String.format("%s%d%s: %s",
                 "%",
                 formatSize.isPresent()? formatSize.getAsInt(): 5,
                 "s",
@@ -56,14 +55,13 @@ public class Jeofetch implements Runnable{
 
     private static Map<String, String> getHardwareProperties() {
         Map<String, String> properties = new HashMap<>();
+        HARDWARE.getMemory().getTotal();
         properties.put("cpu", HARDWARE.getProcessor().getProcessorIdentifier().getName());
         properties.put("gpu", String.join(", ", HARDWARE.getGraphicsCards()
                 .stream()
                 .map(GraphicsCard::getName)
                 .toArray(String[]::new)));
-        properties.put("ram", bytesToReadableSize(((WindowsHardwareAbstractionLayer) HARDWARE)
-                .createMemory()
-                .getTotal()));
+        properties.put("ram", bytesToReadableSize(HARDWARE.getMemory().getTotal()));
         return properties;
     }
 
