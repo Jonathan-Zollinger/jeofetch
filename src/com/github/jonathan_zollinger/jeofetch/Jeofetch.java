@@ -9,6 +9,7 @@ import picocli.CommandLine;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalInt;
 
 @CommandLine.Command(name = "jeofetch",
         mixinStandardHelpOptions = true,
@@ -18,6 +19,9 @@ import java.util.Map;
 public class Jeofetch implements Runnable{
     static HardwareAbstractionLayer HARDWARE;
     static OperatingSystem OS;
+
+    @CommandLine.Spec
+    CommandLine.Model.CommandSpec spec;
 
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(new Jeofetch());
@@ -33,6 +37,17 @@ public class Jeofetch implements Runnable{
         OS = new SystemInfo().getOperatingSystem();
         Map<String, String> properties = getHardwareProperties();
         properties.putAll(getOsProperties());
+        OptionalInt formatSize = properties.keySet().stream().mapToInt(String::length).max();
+        String formatter = String.format("%s%d%s = %s",
+                "%",
+                formatSize.isPresent()? formatSize.getAsInt(): 5,
+                "s",
+                "%-1s");
+        for (String property: properties.keySet()) {
+            spec.commandLine().getOut().println( String.format(formatter,
+                    property, properties.get(property)));
+        }
+
     }
 
     private static Map<String, String> getOsProperties() {
@@ -41,12 +56,12 @@ public class Jeofetch implements Runnable{
 
     private static Map<String, String> getHardwareProperties() {
         Map<String, String> properties = new HashMap<>();
-        properties.put("cpu:", HARDWARE.getProcessor().getProcessorIdentifier().getName());
-        properties.put("gpu:", String.join(", ", HARDWARE.getGraphicsCards()
+        properties.put("cpu", HARDWARE.getProcessor().getProcessorIdentifier().getName());
+        properties.put("gpu", String.join(", ", HARDWARE.getGraphicsCards()
                 .stream()
                 .map(GraphicsCard::getName)
                 .toArray(String[]::new)));
-        properties.put("ram:", bytesToReadableSize(((WindowsHardwareAbstractionLayer) HARDWARE)
+        properties.put("ram", bytesToReadableSize(((WindowsHardwareAbstractionLayer) HARDWARE)
                 .createMemory()
                 .getTotal()));
         return properties;
