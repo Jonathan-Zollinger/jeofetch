@@ -2,7 +2,7 @@
 
 version 0.0.1
 
-![simple-jeofetch-example.gif](simple-jeofetch-example.gif)
+![](jeofetch.gif)
 ## Install
 
 Download the binaries from the [latest release](https://github.com/Jonathan-Zollinger/jeofetch/releases) and 
