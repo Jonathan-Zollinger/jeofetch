@@ -6,6 +6,9 @@ import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import picocli.CommandLine;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
@@ -37,6 +40,11 @@ public class Jeofetch implements Runnable{
         Map<String, String> properties = getHardwareProperties();
         properties.putAll(getOsProperties());
         OptionalInt formatSize = properties.keySet().stream().mapToInt(String::length).max();
+        try {
+            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("/home/jonathan/go/src/github.com/jonathan-zollinger/redhat/src/blueprints/baseline-workstation/assets/ascii/tie-fighter.ans")))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         String formatter = String.format("%s%d%s: %s",
                 "%",
                 formatSize.isPresent()? formatSize.getAsInt(): 5,
