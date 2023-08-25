@@ -74,7 +74,12 @@ public class Jeofetch implements Runnable{
                 .stream()
                 .map(GraphicsCard::getName)
                 .toArray(String[]::new)));
-        properties.put("ram", bytesToReadableSize(HARDWARE.getMemory().getTotal()));
+        float ramUsed = (float) 1.00 - (float) HARDWARE.getMemory().getAvailable() / HARDWARE.getMemory().getTotal();
+        properties.put("ram", String.format("%s/%s (%.2f%s)",
+                bytesToReadableSize(HARDWARE.getMemory().getTotal() - HARDWARE.getMemory().getAvailable()).split(" ")[0],
+                bytesToReadableSize(HARDWARE.getMemory().getTotal()),
+                ramUsed * 100,
+                "%"));
         return properties;
     }
 
