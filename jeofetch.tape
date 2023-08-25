@@ -1,8 +1,9 @@
 Output jeofetch.gif
 
 Set FontSize 32
-Set Width 1200
-Set Height 600
+Set Width 1800
+Set Height 1400
+Set Framerate 8
 
 Type "jeofetch"
 

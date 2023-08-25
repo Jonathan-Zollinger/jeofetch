@@ -6,6 +6,9 @@ import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 import picocli.CommandLine;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
@@ -37,6 +40,11 @@ public class Jeofetch implements Runnable{
         Map<String, String> properties = getHardwareProperties();
         properties.putAll(getOsProperties());
         OptionalInt formatSize = properties.keySet().stream().mapToInt(String::length).max();
+        try {
+            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("tie-fighter.ans")))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         String formatter = String.format("%s%d%s: %s",
                 "%",
                 formatSize.isPresent()? formatSize.getAsInt(): 5,
@@ -50,7 +58,12 @@ public class Jeofetch implements Runnable{
     }
 
     private static Map<String, String> getOsProperties() {
-        return new HashMap<>();
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("os", OS.getFamily() + " " + OS.getVersionInfo().getVersion());
+        properties.put("hostname", OS.getNetworkParams().getHostName());
+        properties.put("uptime", getReadableTime(OS.getSystemUptime()));
+        return properties;
     }
 
     private static Map<String, String> getHardwareProperties() {
@@ -61,13 +74,27 @@ public class Jeofetch implements Runnable{
                 .stream()
                 .map(GraphicsCard::getName)
                 .toArray(String[]::new)));
-        properties.put("ram", bytesToReadableSize(HARDWARE.getMemory().getTotal()));
+        float ramUsed = (float) 1.00 - (float) HARDWARE.getMemory().getAvailable() / HARDWARE.getMemory().getTotal();
+        properties.put("ram", String.format("%s/%s (%.2f%s)",
+                bytesToReadableSize(HARDWARE.getMemory().getTotal() - HARDWARE.getMemory().getAvailable()).split(" ")[0],
+                bytesToReadableSize(HARDWARE.getMemory().getTotal()),
+                ramUsed * 100,
+                "%"));
         return properties;
     }
 
-    public static String bytesToReadableSize(long bytes) {
+    static String bytesToReadableSize(long bytes) {
         if (bytes < 1024) return bytes + " B";
         int z = (63 - Long.numberOfLeadingZeros(bytes)) / 10;
         return String.format("%.1f %sB", (double)bytes / (1L << (z * 10)), " KMGTPE".charAt(z));
+    }
+
+    static String getReadableTime(Long seconds) {
+        long hours = seconds / 3600;
+        seconds = seconds % 3600;
+        long minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        return hours + "h " + minutes + "m " + seconds + "s";
     }
 }
