@@ -58,7 +58,12 @@ public class Jeofetch implements Runnable{
     }
 
     private static Map<String, String> getOsProperties() {
-        return new HashMap<>();
+
+        HashMap<String, String> properties = new HashMap<>();
+        properties.put("os", OS.getFamily() + " " + OS.getVersionInfo().getVersion());
+        properties.put("hostname", OS.getNetworkParams().getHostName());
+        properties.put("uptime", getReadableTime(OS.getSystemUptime()));
+        return properties;
     }
 
     private static Map<String, String> getHardwareProperties() {
@@ -73,9 +78,18 @@ public class Jeofetch implements Runnable{
         return properties;
     }
 
-    public static String bytesToReadableSize(long bytes) {
+    static String bytesToReadableSize(long bytes) {
         if (bytes < 1024) return bytes + " B";
         int z = (63 - Long.numberOfLeadingZeros(bytes)) / 10;
         return String.format("%.1f %sB", (double)bytes / (1L << (z * 10)), " KMGTPE".charAt(z));
+    }
+
+    static String getReadableTime(Long seconds) {
+        long hours = seconds / 3600;
+        seconds = seconds % 3600;
+        long minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        return hours + "h " + minutes + "m " + seconds + "s";
     }
 }
