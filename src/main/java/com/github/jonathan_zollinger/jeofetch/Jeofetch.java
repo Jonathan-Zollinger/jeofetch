@@ -41,7 +41,7 @@ public class Jeofetch implements Runnable{
         properties.putAll(getOsProperties());
         OptionalInt formatSize = properties.keySet().stream().mapToInt(String::length).max();
         try {
-            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("/home/jonathan/go/src/github.com/jonathan-zollinger/redhat/src/blueprints/baseline-workstation/assets/ascii/tie-fighter.ans")))));
+            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("tie-fighter.ans")))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
