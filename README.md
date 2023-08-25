@@ -1,6 +1,5 @@
 # jeofetch
 
-version 0.0.1
 
 ![](jeofetch.gif)
 ## Install
