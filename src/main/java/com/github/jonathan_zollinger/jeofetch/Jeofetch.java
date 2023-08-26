@@ -38,7 +38,7 @@ public class Jeofetch implements Runnable{
 
     private void printSnapshot(Map<String, String> properties) {
         try {
-            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("tie-fighter.ans")))));
+            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("ascii-art/tie-fighter.ans")))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

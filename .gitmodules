@@ -1,0 +1,3 @@
+[submodule "ascii-art"]
+	path = ascii-art
+	url = git@github.com:jonathan-zollinger/ascii-art.git
