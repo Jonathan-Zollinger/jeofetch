@@ -15,7 +15,7 @@ import static com.github.jonathan_zollinger.jeofetch.utils.Stats.getOsProperties
 
 @CommandLine.Command(name = "jeofetch",
         mixinStandardHelpOptions = true,
-        version = "jeofetch v0.0.1",
+        version = "jeofetch v0.0.2",
         description="jeofetch is a system information tool written in java",
         footer = "written by Jonathan Zollinger")
 public class Jeofetch implements Runnable{
