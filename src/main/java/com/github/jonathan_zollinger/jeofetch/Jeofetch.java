@@ -8,8 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.OptionalInt;
 
+import static com.github.jonathan_zollinger.jeofetch.utils.Printout.printSnapshot;
 import static com.github.jonathan_zollinger.jeofetch.utils.Stats.getHardwareProperties;
 import static com.github.jonathan_zollinger.jeofetch.utils.Stats.getOsProperties;
 
@@ -33,26 +33,15 @@ public class Jeofetch implements Runnable{
     @Override
     public void run() {
 
-        printSnapshot(getJeofetchStats());
-    }
-
-    private void printSnapshot(Map<String, String> properties) {
         try {
-            spec.commandLine().getOut().println((new String(Files.readAllBytes(Paths.get("tie-fighter.ans")))));
+            printSnapshot(spec, (new String(Files.readAllBytes(Paths.get("tie-fighter.ans"))))
+                    .split("\n"), getJeofetchStats());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        OptionalInt formatSize = properties.keySet().stream().mapToInt(String::length).max();
-        String formatter = String.format("%s%d%s: %s",
-                "%",
-                formatSize.isPresent()? formatSize.getAsInt(): 5,
-                "s",
-                "%-1s");
-        for (String property: properties.keySet()) {
-            spec.commandLine().getOut().println( String.format(formatter,
-                    property, properties.get(property)));
-        }
     }
+
+
 
     private Map<String, String> getJeofetchStats() {
         return new HashMap<>() {{
