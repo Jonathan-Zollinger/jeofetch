@@ -32,7 +32,6 @@ public class Printout {
             line++;
         }
     }
-
     public static void printSnapshot(CommandLine.Model.CommandSpec spec, AsciiArtEnum asciiEnum, Map<String, String> properties){
         printSnapshot(spec, asciiEnum.artPiece.split("\n"), properties);
     }

@@ -46,7 +46,6 @@ public enum AsciiArtEnum {
                                [38;5;39m\\_ \\       [38;5;15m .
                                  [38;5;39m~[38;5;51mo[0m
 """);
-
      public final String artPiece;
     AsciiArtEnum(String artPiece) {
         this.artPiece = artPiece;

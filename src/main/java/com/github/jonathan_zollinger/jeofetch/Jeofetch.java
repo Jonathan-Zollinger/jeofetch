@@ -33,14 +33,10 @@ public class Jeofetch implements Runnable{
         printSnapshot(spec, AsciiArtEnum.LAMBDA_SHUTTLE, getJeofetchStats());
     }
 
-
-
     private Map<String, String> getJeofetchStats() {
         return new HashMap<>() {{
             putAll(getHardwareProperties(new SystemInfo().getHardware()));
             putAll(getOsProperties(new SystemInfo().getOperatingSystem()));
         }};
-
     }
-
 }
