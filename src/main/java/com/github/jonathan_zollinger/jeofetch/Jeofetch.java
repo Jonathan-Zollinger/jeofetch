@@ -30,7 +30,7 @@ public class Jeofetch implements Runnable{
 
     @Override
     public void run() {
-        printSnapshot(spec, AsciiArtEnum.TIE_FIGHTER, getJeofetchStats());
+        printSnapshot(spec, AsciiArtEnum.LAMBDA_SHUTTLE, getJeofetchStats());
     }
 
 
