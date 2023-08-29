@@ -1,11 +1,9 @@
 package com.github.jonathan_zollinger.jeofetch;
 
+import com.github.jonathan_zollinger.jeofetch.utils.AsciiArtEnum;
 import oshi.SystemInfo;
 import picocli.CommandLine;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,13 +30,7 @@ public class Jeofetch implements Runnable{
 
     @Override
     public void run() {
-
-        try {
-            printSnapshot(spec, (new String(Files.readAllBytes(Paths.get("ascii-art/tie-fighter.ans"))))
-                    .split("\n"), getJeofetchStats());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        printSnapshot(spec, AsciiArtEnum.TIE_FIGHTER, getJeofetchStats());
     }
 
 

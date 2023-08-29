@@ -33,6 +33,10 @@ public class Printout {
         }
     }
 
+    public static void printSnapshot(CommandLine.Model.CommandSpec spec, AsciiArtEnum asciiEnum, Map<String, String> properties){
+        printSnapshot(spec, asciiEnum.artPiece.split("\n"), properties);
+    }
+
     private static int getVisibleLength(int maxLengthSansAnsiSequence, String string) {
         Matcher ansiMatcher = ANSI_PATTERN.matcher(string);
         while (ansiMatcher.find()) {
