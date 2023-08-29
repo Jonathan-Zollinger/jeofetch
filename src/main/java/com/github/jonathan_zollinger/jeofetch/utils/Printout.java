@@ -9,17 +9,21 @@ import java.util.regex.Pattern;
 
 public class Printout {
     static Pattern ANSI_PATTERN = Pattern.compile("\\u001B[^m]*m");
+
     public static void printSnapshot(CommandLine.Model.CommandSpec spec, String[] image, Map<String, String> properties) {
         String propertiesFormatter = "%" + getMaxLength(properties.keySet().toArray(new String[0])) + "s: %-1s";
         int line = 0;
+        while ((image.length - properties.keySet().size()) / 2 > line) {
+            spec.commandLine().getOut().println(image[line]);
+            line ++;
+        }
         for (String property : properties.keySet()) {
-            Matcher ansiMatcher = ANSI_PATTERN.matcher(image[line]);
-            int imageLength = getMaxLength(image);
-            while(ansiMatcher.find()){
-                imageLength += ansiMatcher.group().length();
+            String imageLine;
+            if (line >= image.length) {
+                imageLine = String.format("%" + getMaxLength(image), " ");
+            } else {
+                imageLine = String.format("%-" + getVisibleLength(getMaxLength(image), image[line]) + "s", image[line]);
             }
-            String imageLine = String.format("%-" + imageLength + "s", image[line]);
-
             spec.commandLine().getOut().println(imageLine + String.format(propertiesFormatter, property, properties.get(property)));
             line++;
         }
@@ -27,6 +31,14 @@ public class Printout {
             spec.commandLine().getOut().println(image[line]);
             line++;
         }
+    }
+
+    private static int getVisibleLength(int maxLengthSansAnsiSequence, String string) {
+        Matcher ansiMatcher = ANSI_PATTERN.matcher(string);
+        while (ansiMatcher.find()) {
+            maxLengthSansAnsiSequence += ansiMatcher.group().length();
+        }
+        return maxLengthSansAnsiSequence;
     }
 
     static int getMaxLength(String[] strings) {
