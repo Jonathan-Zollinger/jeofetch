@@ -4,6 +4,7 @@ import com.github.jonathan_zollinger.jeofetch.utils.AsciiArtEnum;
 import oshi.SystemInfo;
 import picocli.CommandLine;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,12 @@ public class Jeofetch implements Runnable{
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
 
+    @CommandLine.Option(
+            names = "--properties, -p",
+            split = ","
+    )
+    String[] properties = "os, hostname, uptime, cpu, gpu, ram".split(",");
+
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(new Jeofetch());
         int exitCode = commandLine.execute(args);
@@ -30,15 +37,15 @@ public class Jeofetch implements Runnable{
 
     @Override
     public void run() {
-        printSnapshot(spec, AsciiArtEnum.LAMBDA_SHUTTLE, getJeofetchStats());
+        printSnapshot(spec, AsciiArtEnum.LAMBDA_SHUTTLE, getJeofetchStats(properties));
     }
 
 
 
-    private Map<String, String> getJeofetchStats() {
+    private Map<String, String> getJeofetchStats(String[] properties) {
         return new HashMap<>() {{
-            putAll(getHardwareProperties(new SystemInfo().getHardware()));
-            putAll(getOsProperties(new SystemInfo().getOperatingSystem()));
+            putAll(getHardwareProperties(new SystemInfo().getHardware(properties)));
+            putAll(getOsProperties(new SystemInfo().getOperatingSystem(properties)));
         }};
 
     }
