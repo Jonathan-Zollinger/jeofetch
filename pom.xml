@@ -7,6 +7,7 @@
     <groupId>com.github.jonathan-zollinger</groupId>
     <artifactId>jeofetch</artifactId>
     <version>0.0.2</version>
+<!--    <packaging>jlink</packaging>-->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -52,55 +53,51 @@
             <artifactId>slf4j-nop</artifactId>
             <version>2.0.7</version>
         </dependency>
-    </dependencies>
 
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jlink-plugin</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.github.akman</groupId>-->
+<!--            <artifactId>jlink-maven-plugin</artifactId>-->
+<!--            <version>0.1.11</version>-->
+<!--        </dependency>-->
+    </dependencies>
     <build>
+<!--        <pluginManagement>-->
+<!--            <plugins>-->
+<!--                <plugin>-->
+<!--                    <groupId>com.github.akman</groupId>-->
+<!--                    <artifactId>jlink-maven-plugin</artifactId>-->
+<!--                    <version>0.1.11</version>-->
+<!--                </plugin>-->
+<!--            </plugins>-->
+<!--        </pluginManagement>-->
         <plugins>
+            <plugin>
+                <groupId>com.github.akman</groupId>
+                <artifactId>jlink-maven-plugin</artifactId>
+                <version>0.1.2</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jlink</goal>
+                        </goals>
+                        <configuration>
+                            <!-- put your configurations here -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M7</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <id>bundle-app</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assemble</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
-                    <programs>
-                        <program>
-                            <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
-                            <id>${project.artifactId}</id>
-                        </program>
-                    </programs>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <repositoryName>lib</repositoryName>
-                    <useWildcardClassPath>true</useWildcardClassPath>
-                </configuration>
             </plugin>
         </plugins>
     </build>
