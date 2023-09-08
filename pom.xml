@@ -7,13 +7,7 @@
     <groupId>com.github.jonathan_zollinger</groupId>
     <artifactId>jeofetch</artifactId>
     <version>0.0.2</version>
-    <packaging>${packaging}</packaging>
-
-    <parent>
-        <groupId>io.micronaut.platform</groupId>
-        <artifactId>micronaut-parent</artifactId>
-        <version>4.0.6</version>
-    </parent>
+    <!--    <packaging>${packaging}</packaging>-->
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -22,12 +16,9 @@
         <release.version>17</release.version>
         <native.maven.plugin.version>19.2.1</native.maven.plugin.version>
         <junit.jupiter.version>5.8.1</junit.jupiter.version>
-        <packaging>jar</packaging>
-        <micronaut.version>4.0.6</micronaut.version>
-        <asciidoctor.maven.plugin.version>2.2.2</asciidoctor.maven.plugin.version>
-        <asciidoctorj.version>2.5.10</asciidoctorj.version>
-        <asciidoctorj.diagram.version>2.2.3</asciidoctorj.diagram.version>
-        <jruby.version>9.4.3.0</jruby.version>
+        <!--        <packaging>jar</packaging>-->
+        <!--        <jruby.version>9.4.3.0</jruby.version>-->
+        <trace-agent.directory>../src/main/resources/</trace-agent.directory>
         <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
     </properties>
 
@@ -42,30 +33,20 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.7.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>info.picocli</groupId>
-            <artifactId>picocli</artifactId>
             <version>4.7.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>info.picocli</groupId>
-            <artifactId>picocli-codegen</artifactId>
-            <version>4.7.5</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -77,78 +58,105 @@
         </dependency>
 
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.micronaut.maven</groupId>
-                <artifactId>micronaut-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <!-- Uncomment to enable incremental compilation -->
-                    <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
-                    <annotationProcessorPaths combine.self="override">
+    <profiles>
+        <profile>
+            <id>assembled-jar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.0.0-M7</version>
+                    </plugin>
 
-                        <path>
-                            <groupId>info.picocli</groupId>
-                            <artifactId>picocli-codegen</artifactId>
-                            <version>${picocli.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.oracle.substratevm</groupId>
-                <artifactId>native-image-maven-plugin</artifactId>
-                <version>${native.maven.plugin.version}</version>
-                <extensions>true</extensions>
-                <executions>
-                    <execution>
-                        <id>build-native</id>
-                        <goals>
-                            <goal>native-image</goal>
-                        </goals>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>3.3.0</version>
                         <configuration>
-                            <mainClass>${mainClass}</mainClass>
-                            <imageName>graal-executable</imageName>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                    <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                </manifest>
+                            </archive>
                         </configuration>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
+                    </plugin>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <id>bundle-app</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assemble</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
-                    <programs>
-                        <program>
-                            <mainClass>${mainClass}</mainClass>
-                            <id>${project.artifactId}</id>
-                        </program>
-                    </programs>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <repositoryName>lib</repositoryName>
-                    <useWildcardClassPath>true</useWildcardClassPath>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>appassembler-maven-plugin</artifactId>
+                        <version>1.10</version>
+                        <executions>
+                            <execution>
+                                <id>bundle-app</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>assemble</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <assembleDirectory>${project.build.directory}/${project.artifactId}</assembleDirectory>
+                            <programs>
+                                <program>
+                                    <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
+                                    <id>${project.artifactId}</id>
+                                </program>
+                            </programs>
+                            <repositoryLayout>flat</repositoryLayout>
+                            <repositoryName>lib</repositoryName>
+                            <useWildcardClassPath>true</useWildcardClassPath>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>graal-native-image</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.oracle.substratevm</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>${mainClass}</mainClass>
+                                    <skip>false</skip>
+                                    <imageName>jeofetch</imageName>
+                                    <buildArgs>
+                                        --no-server
+                                        --no-fallback
+                                        --verbose
+                                        --report-unsupported-elements-at-runtime
+                                        -H:+PrintAnalysisCallTree
+                                        -H:ReflectionConfigurationFiles=${trace-agent.directory}/reflect-config.json
+                                        -H:DynamicProxyConfigurationFiles=${trace-agent.directory}/proxy-config.json
+                                        -H:+JNI -H:JNIConfigurationFiles=${trace-agent.directory}/jni-config.json
+                                        -H:ResourceConfigurationFiles=${trace-agent.directory}/resource-config.json
+                                        -H:+ReportExceptionStackTraces -H:Log=registerResource
+                                        --initialize-at-run-time=oshi.software.os.mac.MacOperatingSystem
+                                        --initialize-at-run-time=oshi.software.os.unix.freebsd.FreeBsdOperatingSystem
+                                        --initialize-at-run-time=oshi.software.os.unix.solaris.SolarisOperatingSystem
+                                        --initialize-at-run-time=oshi.software.os.windows.WindowsOperatingSystem
+                                        --initialize-at-run-time=oshi.jna.platform.mac.SystemB
+                                        --initialize-at-run-time=com.sun.jna.platform.win32.Advapi32
+                                        --allow-incomplete-classpath
+                                    </buildArgs>
+                                </configuration>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
