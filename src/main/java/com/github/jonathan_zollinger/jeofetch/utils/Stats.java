@@ -46,7 +46,6 @@ public class Stats {
         seconds = seconds % 3600;
         long minutes = seconds / 60;
         seconds = seconds % 60;
-
         return hours + "h " + minutes + "m " + seconds + "s";
     }
 }

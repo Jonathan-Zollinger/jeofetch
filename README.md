@@ -1,7 +1,17 @@
 # jeofetch
 
+jeofetch is a system snapshot tool for the cli written in Java. Jeofetch aims to improve on other system snapshot tools like neofetch in speed, availability and versatility.  
 
-![](jeofetch.gif)
+![](src/docs/jeofetch.gif)
+
+## Speed
+Jeofetch is blazing fast! below shows jeofetch and neofetch head to head with times reported.
+
+|   |   |
+|---|---|
+| ![](src/docs/time-jeofetch.gif) | ![](src/docs/time-neofetch.gif) |
+
+
 ## Install
 
 Download the binaries from the [latest release](https://github.com/Jonathan-Zollinger/jeofetch/releases) and

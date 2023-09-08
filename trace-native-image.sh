@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Java Home is $JAVA_HOME"
+export conf_dir="/home/jonathan/go/src/github.com/jonathan-zollinger/jeofetch/src/main/resources/"
+sudo "$JAVA_HOME"/bin/java -agentlib:native-image-agent=config-output-dir="$conf_dir",config-write-period-secs=300,config-write-initial-delay-secs=5 -classpath /home/jonathan/go/src/github.com/jonathan-zollinger/jeofetch/target/classes:/home/jonathan/.m2/repository/com/github/oshi/oshi-core/6.4.4/oshi-core-6.4.4.jar:/home/jonathan/.m2/repository/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar:/home/jonathan/.m2/repository/net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar:/home/jonathan/.m2/repository/org/slf4j/slf4j-api/2.0.7/slf4j-api-2.0.7.jar:/home/jonathan/.m2/repository/info/picocli/picocli/4.7.5/picocli-4.7.5.jar com.github.jonathan_zollinger.jeofetch.Jeofetch
