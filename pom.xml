@@ -15,10 +15,10 @@
         <jdk.version>17</jdk.version>
         <release.version>17</release.version>
         <native.maven.plugin.version>19.2.1</native.maven.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.8.1</junit.jupiter.version>
-        <!--        <packaging>jar</packaging>-->
-        <!--        <jruby.version>9.4.3.0</jruby.version>-->
-        <trace-agent.directory>../src/main/resources/</trace-agent.directory>
+        <image-filetype>exe</image-filetype>
+        <trace-agent.output.directory>META-INF</trace-agent.output.directory>
         <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
     </properties>
 
@@ -60,12 +60,15 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>assembled-jar</id>
+            <id>simple</id>
             <build>
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>3.0.0-M7</version>
+                        <configuration>
+                            <argLine>-agentlib:native-image-agent=config-output-dir=target/${trace-agent.output.directory}</argLine>
+                        </configuration>
                     </plugin>
 
                     <plugin>
@@ -113,7 +116,7 @@
             </build>
         </profile>
         <profile>
-            <id>graal-native-image</id>
+            <id>native-package</id>
             <build>
                 <plugins>
                     <plugin>
@@ -130,17 +133,17 @@
                                 <configuration>
                                     <mainClass>${mainClass}</mainClass>
                                     <skip>false</skip>
-                                    <imageName>jeofetch</imageName>
+                                    <imageName>jeofetch.${image-filetype}</imageName>
                                     <buildArgs>
                                         --no-server
                                         --no-fallback
                                         --verbose
                                         --report-unsupported-elements-at-runtime
                                         -H:+PrintAnalysisCallTree
-                                        -H:ReflectionConfigurationFiles=${trace-agent.directory}/reflect-config.json
-                                        -H:DynamicProxyConfigurationFiles=${trace-agent.directory}/proxy-config.json
-                                        -H:+JNI -H:JNIConfigurationFiles=${trace-agent.directory}/jni-config.json
-                                        -H:ResourceConfigurationFiles=${trace-agent.directory}/resource-config.json
+                                        -H:ReflectionConfigurationFiles=${trace-agent.output.directory}/reflect-config.json
+                                        -H:DynamicProxyConfigurationFiles=${trace-agent.output.directory}/proxy-config.json
+                                        -H:+JNI -H:JNIConfigurationFiles=${trace-agent.output.directory}/jni-config.json
+                                        -H:ResourceConfigurationFiles=${trace-agent.output.directory}/resource-config.json
                                         -H:+ReportExceptionStackTraces -H:Log=registerResource
                                         --initialize-at-run-time=oshi.software.os.mac.MacOperatingSystem
                                         --initialize-at-run-time=oshi.software.os.unix.freebsd.FreeBsdOperatingSystem
