@@ -60,7 +60,7 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>assembled-jar</id>
+            <id>simple</id>
             <build>
                 <plugins>
                     <plugin>
@@ -113,7 +113,7 @@
             </build>
         </profile>
         <profile>
-            <id>graal-native-image</id>
+            <id>native-package</id>
             <build>
                 <plugins>
                     <plugin>
