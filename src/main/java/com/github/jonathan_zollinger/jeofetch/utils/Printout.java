@@ -9,13 +9,16 @@ import java.util.regex.Pattern;
 
 public class Printout {
     static Pattern ANSI_PATTERN = Pattern.compile("\\u001B[^m]*m");
+    static Pattern LAST_ANSI_PATTERN = Pattern.compile(ANSI_PATTERN.pattern() + "(?![\\s\\S]*" + ANSI_PATTERN.pattern() + ")");
+    static String COLOR_RESET = "[0m";
+
 
     public static void printSnapshot(CommandLine.Model.CommandSpec spec, String[] image, Map<String, String> properties) {
         String propertiesFormatter = "%" + getMaxLength(properties.keySet().toArray(new String[0])) + "s: %-1s";
         int line = 0;
         while ((image.length - properties.keySet().size()) / 2 > line) {
             spec.commandLine().getOut().println(image[line]);
-            line ++;
+            line++;
         }
         for (String property : properties.keySet()) {
             String imageLine;
@@ -24,7 +27,14 @@ public class Printout {
             } else {
                 imageLine = String.format("%-" + getVisibleLength(getMaxLength(image), image[line]) + "s", image[line]);
             }
-            spec.commandLine().getOut().println(imageLine + String.format(propertiesFormatter, property, properties.get(property)));
+            String lastColor = getLastColorCode(image[line]);
+            spec.commandLine().getOut().println(
+                    imageLine +
+                    COLOR_RESET +
+                    String.format(propertiesFormatter,
+                            property,
+                            properties.get(property)) +
+                    lastColor);
             line++;
         }
         while (line < image.length) {
@@ -32,7 +42,14 @@ public class Printout {
             line++;
         }
     }
-    public static void printSnapshot(CommandLine.Model.CommandSpec spec, AsciiArtEnum asciiEnum, Map<String, String> properties){
+
+    private static String getLastColorCode(String AnsiString) {
+        Matcher ansiMatcher = LAST_ANSI_PATTERN.matcher(AnsiString);
+        return ansiMatcher.find() ? ansiMatcher.group() : COLOR_RESET;
+    }
+
+
+    public static void printSnapshot(CommandLine.Model.CommandSpec spec, AsciiArtEnum asciiEnum, Map<String, String> properties) {
         printSnapshot(spec, asciiEnum.artPiece.split("\n"), properties);
     }
 
