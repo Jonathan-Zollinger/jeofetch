@@ -1,0 +1,31 @@
+name: Native Image build
+on:
+  pull_request:
+    tags:
+      - '*'
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ macos-latest, windows-latest, ubuntu-latest ]
+        fileType: [ "exe", "app", "bin"]
+        include:
+          - os: macos-latest
+            fileType: "app"
+          - os: windows-latest
+            fileType: "exe"
+          - os: ubuntu-latest
+            fileType: "bin"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17.0.7'
+          distribution: 'graalvm'
+      - name: package
+        run: mvn -Pnative-package package -Dimage.filetype=${{ matrix.fileType }} --file pom.xml
