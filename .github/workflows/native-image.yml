@@ -28,4 +28,4 @@ jobs:
           java-version: '17.0.7'
           distribution: 'graalvm'
       - name: package
-        run: mvn -Pnative-package package -Dimage.filetype=${{ matrix.fileType }} --file pom.xml
+        run: mvn -Pnative-package package "-Dimage.filetype=$matrix.fileType" --file pom.xml
