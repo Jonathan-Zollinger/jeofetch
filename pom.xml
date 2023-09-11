@@ -17,7 +17,7 @@
         <native.maven.plugin.version>19.2.1</native.maven.plugin.version>
         <junit.jupiter.version>5.8.1</junit.jupiter.version>
         <image.filetype>exe</image.filetype>
-        <trace-agent.directory>../src/main/resources/</trace-agent.directory>
+        <trace-agent.output.directory>target/META-INF</trace-agent.output.directory>
         <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
     </properties>
 
@@ -65,6 +65,9 @@
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>3.0.0-M7</version>
+                        <configuration>
+                            <argLine>-agentlib:native-image-agent=config-output-dir=${trace-agent.output.directory}</argLine>
+                        </configuration>
                     </plugin>
 
                     <plugin>
@@ -136,10 +139,10 @@
                                         --verbose
                                         --report-unsupported-elements-at-runtime
                                         -H:+PrintAnalysisCallTree
-                                        -H:ReflectionConfigurationFiles=${trace-agent.directory}/reflect-config.json
-                                        -H:DynamicProxyConfigurationFiles=${trace-agent.directory}/proxy-config.json
-                                        -H:+JNI -H:JNIConfigurationFiles=${trace-agent.directory}/jni-config.json
-                                        -H:ResourceConfigurationFiles=${trace-agent.directory}/resource-config.json
+                                        -H:ReflectionConfigurationFiles=${trace-agent.output.directory}/reflect-config.json
+                                        -H:DynamicProxyConfigurationFiles=${trace-agent.output.directory}/proxy-config.json
+                                        -H:+JNI -H:JNIConfigurationFiles=${trace-agent.output.directory}/jni-config.json
+                                        -H:ResourceConfigurationFiles=${trace-agent.output.directory}/resource-config.json
                                         -H:+ReportExceptionStackTraces -H:Log=registerResource
                                         --initialize-at-run-time=oshi.software.os.mac.MacOperatingSystem
                                         --initialize-at-run-time=oshi.software.os.unix.freebsd.FreeBsdOperatingSystem

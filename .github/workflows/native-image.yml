@@ -12,7 +12,6 @@ jobs:
     strategy:
       matrix:
         os: [ macos-latest, windows-latest, ubuntu-latest ]
-        fileType: [ "exe", "app", "bin"]
         include:
           - os: macos-latest
             fileType: "app"
@@ -27,5 +26,9 @@ jobs:
         with:
           java-version: '17.0.7'
           distribution: 'graalvm'
+      - name: assemble jars for tracing
+        run: mvn clean install -Psimple --file pom.xml
+      - name: produce native image trace via junit tests
+        run: mvn clean -Psimple test --file pom.xml
       - name: package
-        run: mvn -Pnative-package package "-Dimage.filetype=$matrix.fileType" --file pom.xml
+        run: mvn -Pnative-package package -Dimage.filetype="$matrix.fileType" --file pom.xml
