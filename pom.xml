@@ -17,7 +17,7 @@
         <native.maven.plugin.version>19.2.1</native.maven.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.jupiter.version>5.8.1</junit.jupiter.version>
-        <image.filetype>exe</image.filetype>
+        <image-filetype>exe</image-filetype>
         <trace-agent.output.directory>META-INF</trace-agent.output.directory>
         <mainClass>com.github.jonathan_zollinger.jeofetch.Jeofetch</mainClass>
     </properties>
@@ -133,7 +133,7 @@
                                 <configuration>
                                     <mainClass>${mainClass}</mainClass>
                                     <skip>false</skip>
-                                    <imageName>jeofetch.${image.filetype}</imageName>
+                                    <imageName>jeofetch.${image-filetype}</imageName>
                                     <buildArgs>
                                         --no-server
                                         --no-fallback
