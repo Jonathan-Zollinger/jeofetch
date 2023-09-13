@@ -29,6 +29,6 @@ jobs:
       - name: produce native image trace via junit tests
         run: mvn clean -Psimple test --file pom.xml
       - name: package
-        run: tree && mvn -Pnative-package package -Dimage-filetype="$fileType" --file pom.xml
+        run: mvn -Pnative-package package -Dimage-filetype="$fileType" --file pom.xml
         env:
           fileType: ${{ matrix.fileType }}
