@@ -26,8 +26,6 @@ jobs:
         with:
           java-version: '17.0.7'
           distribution: 'graalvm'
-      - name: produce native image trace via junit tests
-        run: mvn clean -Psimple test --file pom.xml
       - name: package
         run: mvn -Pnative-package package -Dimage-filetype="$fileType" --file pom.xml
         env:
