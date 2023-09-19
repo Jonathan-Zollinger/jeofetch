@@ -1,4 +1,4 @@
-package com.github.jonathan_zollinger.jeofetch.utils;
+package com.github.jonathan_zollinger.jeofetch.assets;
 
 public enum AsciiArtEnum {
      TIE_FIGHTER("""
