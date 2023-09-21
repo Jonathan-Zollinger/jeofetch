@@ -30,7 +30,7 @@ public class AsciiUtil {
         line = printLayer(line, Collections.singletonMap("hostname", properties.get("hostname")), boldPaint, image[line]);
         properties.remove("hostname");
         line = printLayer(line, properties, image);
-        while (image.length >= line) {
+        while (image.length > line) {
             spec.commandLine().getOut().println(image[line]);
             line++;
         }
@@ -45,17 +45,14 @@ public class AsciiUtil {
         for (String property : properties.keySet()) {
             String imageLine;
             if (line >= image.length) {
-                imageLine = String.format("%" + getMaxLength(image), " ");
+                imageLine = String.format("%" + getMaxLength(image) + "s", " ");
             } else {
                 imageLine = String.format("%-" + getVisibleLength(getMaxLength(image), image[line]) + "s", image[line]);
             }
             spec.commandLine()
                     .getOut()
-                    .println(imageLine + String.format(paintCan.tag(
-                                    "%" +
-                                            getMaxLength(properties.keySet().toArray(new String[0])) +
-                                            "s") +
-                                    ": %-1s",
+                    .println(imageLine + String.format(paintCan.tag("%" + getMaxLength(
+                            properties.keySet().toArray(new String[0])) + "s") + ": %-1s",
                             property,
                             properties.get(property)));
             line++;

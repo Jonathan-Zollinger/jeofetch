@@ -12,6 +12,7 @@ public class RGB extends Color {
 
     @Override
     String ize() {
+        canvas = null == canvas ? CANVAS.foreground: canvas;
         return String.format("%s(%d;%d;%d)", canvas, r, g, b);
     }
 }

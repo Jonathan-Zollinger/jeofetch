@@ -4,6 +4,8 @@ import lombok.Setter;
 import picocli.CommandLine;
 
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Setter
 public class SprayPaint {
@@ -15,8 +17,13 @@ public class SprayPaint {
     }
 
     public String tag(String text){
-        return CommandLine.Help.Ansi.AUTO.string(String.format("@|%s,%s %s|@",
-                String.join(",", Arrays.toString(styles)), color.ize(), text));
+        if (null != styles){
+            return CommandLine.Help.Ansi.AUTO.string(String.format("@|%s,%s %s|@",
+                    Arrays.stream(styles)
+                            .map(Objects::toString)
+                            .collect(Collectors.joining(",")), color.ize(), text));
+        }
+        return CommandLine.Help.Ansi.AUTO.string(String.format("@|%s %s|@", color.ize(), text));
     }
 
 }
