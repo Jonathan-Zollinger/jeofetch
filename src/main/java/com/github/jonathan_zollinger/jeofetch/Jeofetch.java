@@ -2,9 +2,7 @@ package com.github.jonathan_zollinger.jeofetch;
 
 import com.github.jonathan_zollinger.jeofetch.assets.AsciiArtEnum;
 import com.github.jonathan_zollinger.jeofetch.utils.AsciiUtil;
-import com.github.jonathan_zollinger.jeofetch.utils.Polaroid;
-import com.github.jonathan_zollinger.jeofetch.utils.color.AsciiColor;
-import com.github.jonathan_zollinger.jeofetch.utils.color.Foreground;
+import lombok.Data;
 import oshi.SystemInfo;
 import picocli.CommandLine;
 
@@ -22,11 +20,9 @@ import static com.github.jonathan_zollinger.jeofetch.utils.Stats.getOsProperties
 public class Jeofetch implements Runnable {
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
-    static AsciiColor[] colorScheme;
 
     public static void main(String[] args) {
         CommandLine commandLine = new CommandLine(new Jeofetch());
-        colorScheme = new AsciiColor[]{new Foreground("#1387FB")};
         int exitCode = commandLine.execute(args);
         System.exit(exitCode);
         // the bloody transitive property from oshi needs this property assignment
@@ -35,7 +31,7 @@ public class Jeofetch implements Runnable {
 
     @Override
     public void run() {
-        AsciiUtil asciiUtil = new AsciiUtil(colorScheme);
+        AsciiUtil asciiUtil = new AsciiUtil();
         asciiUtil.printSnapshot(spec, AsciiArtEnum.LAMBDA_SHUTTLE, getJeofetchStats());
     }
 

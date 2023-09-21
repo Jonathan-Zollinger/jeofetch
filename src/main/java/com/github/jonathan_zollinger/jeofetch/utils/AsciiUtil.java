@@ -1,11 +1,12 @@
 package com.github.jonathan_zollinger.jeofetch.utils;
 
 import com.github.jonathan_zollinger.jeofetch.assets.AsciiArtEnum;
-import com.github.jonathan_zollinger.jeofetch.utils.color.AsciiColor;
 import picocli.CommandLine;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,25 +15,34 @@ public class AsciiUtil {
     static Pattern ANSI_PATTERN = Pattern.compile("\\u001B[^m]*m");
     static Pattern LAST_ANSI_PATTERN = Pattern.compile(ANSI_PATTERN.pattern() + "(?![\\s\\S]*" + ANSI_PATTERN.pattern() + ")");
     static String COLOR_RESET = "[0m";
-    static AsciiColor[] COLOR_PALETTE;
-    Polaroid colorScheme;
-
-    public AsciiUtil(AsciiColor... colors) {
-        COLOR_PALETTE = colors;
-    }
+    private CommandLine.Model.CommandSpec spec;
+    RGB blue = new RGB(30, 45, 110);
+    private final SprayPaint sprayPaint = new SprayPaint(blue);
 
     public void printSnapshot(CommandLine.Model.CommandSpec spec, String[] image, Map<String, String> properties) {
-        String propertiesFormatter = "%" + getMaxLength(properties.keySet().toArray(new String[0])) + "s: %-1s";
+        this.spec = spec;
         int line = 0;
         while ((image.length - properties.keySet().size()) / 2 > line) {
             spec.commandLine().getOut().println(image[line]);
             line++;
         }
-        String hostname = properties.get("hostname");
+        SprayPaint boldPaint = new SprayPaint(blue);
+        boldPaint.setStyles(new STYLE[]{STYLE.BOLD});
+        line = printLayer(line, Collections.singletonMap("hostname", properties.get("hostname")), boldPaint, image[line]);
         properties.remove("hostname");
-        String headerLine = String.format("%" + getMaxLength(image), " ");
-        headerLine = String.format("%-" + getVisibleLength(getMaxLength(image), image[line]) + "s", image[line]);
+        line = printLayer(line, properties, image);
+        while (image.length >= line) {
+            spec.commandLine().getOut().println(image[line]);
+            line++;
+        }
 
+    }
+
+    private int printLayer(int line, Map<String, String> properties, String... image){
+        return printLayer(line, properties, sprayPaint, image);
+    }
+
+    private int printLayer(int line, Map<String, String> properties, SprayPaint paintCan, String... image) {
         for (String property : properties.keySet()) {
             String imageLine;
             if (line >= image.length) {
@@ -40,20 +50,20 @@ public class AsciiUtil {
             } else {
                 imageLine = String.format("%-" + getVisibleLength(getMaxLength(image), image[line]) + "s", image[line]);
             }
-            String lastColor = getLastColorCode(image[line]);
-            spec.commandLine().getOut().println(
-                    imageLine + COLOR_RESET +
-                            String.format(propertiesFormatter,
-                                    property,
-                                    properties.get(property)) +
-                            lastColor);
+            spec.commandLine()
+                    .getOut()
+                    .println(imageLine + String.format(paintCan.tag(
+                                    "%" +
+                                            getMaxLength(properties.keySet().toArray(new String[0])) +
+                                            "s") +
+                                    ": %-1s",
+                            property,
+                            properties.get(property)));
             line++;
         }
-        while (line < image.length) {
-            spec.commandLine().getOut().println(image[line]);
-            line++;
-        }
+        return line;
     }
+
     public void printSnapshot(CommandLine.Model.CommandSpec spec, AsciiArtEnum asciiEnum, Map<String, String> properties) {
         printSnapshot(spec, asciiEnum.artPiece.split("\n"), properties);
     }
