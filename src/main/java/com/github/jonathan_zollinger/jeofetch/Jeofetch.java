@@ -2,7 +2,6 @@ package com.github.jonathan_zollinger.jeofetch;
 
 import com.github.jonathan_zollinger.jeofetch.assets.AsciiArtEnum;
 import com.github.jonathan_zollinger.jeofetch.utils.AsciiUtil;
-import lombok.Data;
 import oshi.SystemInfo;
 import picocli.CommandLine;
 
